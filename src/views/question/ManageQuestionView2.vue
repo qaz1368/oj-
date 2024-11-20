@@ -126,6 +126,9 @@
               <Input size="middle" :style="{width:'650px'}" v-model:value="form.title"/>
 
             </FormItem>
+            <FormItem label="分值:" name="score">
+              <Input size="middle" :style="{width:'350px'}" v-model:value="form.score"/>
+            </FormItem>
             <FormItem label="难度:" name="degree">
               <Dropdown>
                 <template #overlay>
@@ -301,6 +304,7 @@
           <a-button key="submit" type="primary" :loading="loading" @click="handleOk">提交</a-button>
         </template>
       </Modal>
+<!--      详情-->
       <Modal v-model:open="showDetail" title="题目详情" width="70vw">
         <div>
           <Form
@@ -393,6 +397,7 @@
           <a-button type="primary" key="back" @click="questionDetailClose">关闭</a-button>
         </template>
       </Modal>
+<!--     编辑 -->
       <Modal v-model:open="showEdit" title="编辑题目" @ok="questionUpdate" width="70vw">
         <div>
           <Form
@@ -406,6 +411,10 @@
             <FormItem label="标题:" name="title">
               <Input size="middle" :style="{width:'650px'}" v-model:value="questionEdit.title"/>
 
+            </FormItem>
+            <FormItem label="分值:" name="score">
+
+              <Input size="middle" :style="{width:'450px'}" v-model:value="questionEdit.score"/>
             </FormItem>
             <FormItem label="难度:" name="degree">
               <Dropdown>
@@ -488,6 +497,7 @@
               <span style="width: 80px; font-size: 16px">内容:</span>
               <MdEditor style="min-width: 65vw; " v-model:value="questionEdit.content" :handle-change="onContentChange"></MdEditor>
             </FormItem>
+
             <FormItem label="测试用例:" name="judgeCase">
               <div v-if="questionEdit.judgeCase.length === 0">
                 <template v-for="jcase in questionEdit.judgeCase">
@@ -495,7 +505,7 @@
                          align="baseline">
 
                     <FormItem style="min-width: 300px">
-                      <Input v-model:value="jcase.input">{{ jcase.input }}</Input>
+                      <Input v-model:value="jcase.input">{{jcase.input}}</Input>
                     </FormItem>
                     <FormItem style="min-width: 300px">
                       <Input v-model:value="jcase.output"></Input>
@@ -505,20 +515,19 @@
                 </template>
               </div>
               <div v-else>
-                <template v-for="jcase in questionEdit.judgeCase">
-                  <Space style="display: flex; margin-bottom: 8px"
-                         align="baseline">
-
-                    <FormItem style="min-width: 300px">
+                <template v-for="jcase in questionEdit.judgeCase" :key="index">
+                  <Space style="display: flex; margin-bottom:8px" align="baseline">
+                    <FormItem style="min-width:300px">
                       <Input v-model:value="jcase.input">{{ jcase.input }}</Input>
                     </FormItem>
-                    <FormItem style="min-width: 300px">
+                    <FormItem style="min-width:300px">
                       <Input v-model:value="jcase.output"></Input>
                     </FormItem>
-                    <MinusCircleOutlined/>
                   </Space>
                 </template>
               </div>
+
+
               <FormItem>
                 <aButton type="dashed" block @click="addJudgeCase">
                   <PlusOutlined/>
@@ -711,8 +720,9 @@ const tags = ref(
 删除标签
  */
 const handleClose = (removeTag: string) => {
-  form.value.tags = form.value.tags.filter(tag => tag !== removeTag);
+  form.value.tags = form.value.tags.filter((tag: string) => tag !== removeTag);
 }
+
 const pageSizeOptions = ref<string[]>(['10', '20', '30', '40', '50']);
 const onShowSizeChange = (current: number, pageSize: number) => {
   console.log(current, pageSize);
@@ -747,22 +757,28 @@ const showInput = () => {
     inputRef.value.focus();
   });
 }
-const questionDetail = ref([])
-const questionEdit = ref({
-  answer:"",
-  content: "",
-  judgeCase: [
+const questionDetail = ref<{
+  answer?: string;
+  content?: string;
+  judgeCase?: { input: string; output: string }[];
+  judgeConfig?: { memoryLimit: number; stackLimit: number; timeLimit: number };
+  tags?: string[];
+  title?: string;
+  score?: number;
+  questionDegree?: number;
+}>({});
 
-  ],
-  judgeConfig: {
-    memoryLimit: 1000,
-    stackLimit: 1000,
-    timeLimit: 1000
-  },
+const questionEdit = ref({
+  answer: "",
+  content: "",
+  judgeCase: [{ input: "", output: ""}],
+  judgeConfig: { memoryLimit:1000, stackLimit:1000, timeLimit:1000 },
   tags: [],
   title: "",
-  questionDegree: -1
-})
+  score:0,
+  questionDegree:0 });
+
+
 const showEditModal = async (id: number) => {
   const res = await QuestionControllerService.getQuestionByIdUsingGet(id as any);
   if(res.code === 0) {
@@ -773,23 +789,23 @@ const showEditModal = async (id: number) => {
   questionEdit.value.judgeConfig = JSON.parse(questionEdit.value.judgeConfig as any)
   questionEdit.value.tags = JSON.parse(questionEdit.value.tags as any)
   // questionEdit.value.tags = JSON.parse(questionEdit.value.tags as any)
-  console.log("题目详情", questionEdit.value)
+  console.log("题目详情", questionEdit.value.judgeCase)
   showEdit.value = true;
 }
 const showDetailModal = async (id: number) => {
   const res = await QuestionControllerService.getQuestionByIdUsingGet(id as any);
-  if(res.code === 0) {
-    questionDetail.value = res.data as any
-    console.log("aaa",questionDetail.value)
-    questionDetail.value.judgeConfig = JSON.parse(res.data?.judgeConfig as any)
-    questionDetail.value.judgeCase = JSON.parse(res?.data?.judgeCase as any)
-
+  if (res.code === 0) {
+    questionDetail.value = res.data as any;
+    questionDetail.value.judgeConfig = JSON.parse(res.data?.judgeConfig as any);
+    questionDetail.value.judgeCase = JSON.parse(res?.data?.judgeCase as any);
   }
-
   showDetail.value = true;
 }
 
+
 const questionUpdate = async () => {
+
+  console.log("sefefsefsefsef",questionEdit.value.judgeCase)
   // questionEdit.value = JSON.stringify(questionEdit.value) as any
   const res = await QuestionControllerService.updateQuestionUsingPost(questionEdit.value as any)
   if (res.code === 0) {
@@ -881,6 +897,7 @@ const form = ref(
       },
       "tags": selectedTags.value ?? [],
       "title": "",
+      "score":0,
       questionDegree: questionDegree.value
     }
 )

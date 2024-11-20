@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type QuestionGroupQueryRequest = {
     announcement?: string;
     current?: number;
@@ -14,4 +15,3 @@ export type QuestionGroupQueryRequest = {
     sortOrder?: string;
     status?: number;
 };
-

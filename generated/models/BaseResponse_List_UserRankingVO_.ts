@@ -2,10 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Entry_string_int_ } from './Entry_string_int_';
-export type BaseResponse_List_Entry_string_int_ = {
+
+import type { UserRankingVO } from './UserRankingVO';
+
+export type BaseResponse_List_UserRankingVO_ = {
     code?: number;
-    data?: Array<Entry_string_int_>;
+    data?: Array<UserRankingVO>;
     message?: string;
 };
-

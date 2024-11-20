@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type QuestionGroupAddRequest = {
     actionTime?: string;
     endTime?: string;
@@ -10,4 +11,3 @@ export type QuestionGroupAddRequest = {
     questionIdList?: Array<number>;
     userGroupIdList?: Array<number>;
 };
-

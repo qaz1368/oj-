@@ -2,8 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 import type { Answer } from './Answer';
 import type { OrderItem } from './OrderItem';
+
 export type Page_Answer_ = {
     countId?: string;
     current?: number;
@@ -16,4 +18,3 @@ export type Page_Answer_ = {
     size?: number;
     total?: number;
 };
-

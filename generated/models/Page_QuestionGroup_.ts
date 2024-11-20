@@ -2,8 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 import type { OrderItem } from './OrderItem';
 import type { QuestionGroup } from './QuestionGroup';
+
 export type Page_QuestionGroup_ = {
     countId?: string;
     current?: number;
@@ -16,4 +18,3 @@ export type Page_QuestionGroup_ = {
     size?: number;
     total?: number;
 };
-

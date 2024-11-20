@@ -8,7 +8,7 @@
       <div style=" float: right">
         <a-space style="display: flex" size="large">
           <div style="display: flex; flex-direction: column">
-            <div style="color: #737373">用户组</div>
+            <div style="color: #737373">题目数</div>
             <div style="font-size: 18px; text-align: right">{{questionGroups.length}}</div>
           </div>
           <div style="display: flex; flex-direction: column">
@@ -314,7 +314,7 @@ import {
 import {Checkbox, Timeline as Tl, TimelineItem as Tli} from '@arco-design/web-vue'
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
-import {QuestionGroupControllerService} from "../../../generated";
+import {QuestionGroupControllerService, UserGroupControllerService} from "../../../generated";
 import {useStore} from "vuex";
 import {onMounted} from "@vue/runtime-core";
 import {IconCode} from "@arco-design/web-vue/es/icon";
@@ -376,17 +376,30 @@ const endTimeOk = (value: Dayjs) => {
   timeSearchParams.value.endTime = new Date(value.toString()).getTime() as number
   timeSearchParams.value.limitTime = ((timeSearchParams.value.endTime - timeSearchParams.value.actionTime) / 60000).toFixed(0) as any
 }
-const startTimeChange = (value: Dayjs) => {
-  startTime1.value = value
-  timeSearchParams.value.actionTime = new Date(value.toString()).getTime() as any
-}
-const endTimeChange = (value: Dayjs) => {
-  endTime1.value = value
-  timeSearchParams.value.endTime = new Date(value.toString()).getTime() as any
-}
-const updateExamTimeOk = async () => {
+const startTimeChange = (value: Dayjs | undefined) => {
+  if (value) {
+    startTime1.value = value;
+    timeSearchParams.value.actionTime = new Date(value.toString()).getTime() as any;
+  } else {
+    // 处理 value 为 undefined 的情况，例如设置默认值或清空时间
+    startTime1.value = undefined;
+    timeSearchParams.value.actionTime = undefined;
+  }
+};
 
-  const res = await QuestionGroupControllerService.updateQuestionGroupTimeUsingGet(timeSearchParams.value)
+const endTimeChange = (value: Dayjs | undefined) => {
+  if (value) {
+    endTime1.value = value;
+    timeSearchParams.value.endTime = new Date(value.toString()).getTime() as any;
+  } else {
+    // 处理 value 为 undefined 的情况，例如设置默认值或清空时间
+    endTime1.value = undefined;
+    timeSearchParams.value.endTime = undefined;
+  }
+};
+
+const updateExamTimeOk = async () => {
+  const res = await QuestionGroupControllerService.updateQuestionGroupTimeUsingPost(timeSearchParams.value)
   if (res.code === 0) {
     message.success("修改成功")
     updateExamTimeFlag.value = false
@@ -482,13 +495,13 @@ const pageChange = async () => {
 }
 const allUserGroups = ref([] as any[])
 const getAllUserGroups = async () => {
-  const res = await QuestionGroupControllerService.listUserGroupByPageUsingPost(allUserGroupsSearchParams.value)
+  const res = await UserGroupControllerService.listUserGroupByPageUsingPost(allUserGroupsSearchParams.value)
   if(res.code === 0) {
     allUserGroups.value = res.data.records
     // total.value = res.total
   }
 }
-const existedUserGroups = ref([] as any[])
+const existedUserGroups = ref([] as any[]) ?? []
 const open = ref<boolean>(false);
 const addUserGroup = async () => {
   await loadUserGroup()
@@ -510,7 +523,7 @@ const form = computed(() => ([
 ]))
 let userGroups = ref([
 
-])
+]) ?? []
 const isSelect = (item: any) => {
   console.log(item.groupName)
   return selectedUserGroup.value.includes(item.groupName)
@@ -582,23 +595,35 @@ const loadUserGroup =  async () => {
   // }
 
   // );
-  const res = await QuestionGroupControllerService.listUserGroupByUserIdUsingGet();
+  const res = await UserGroupControllerService.listUserGroupByUserIdUsingGet();
   userGroups.value = res.data as any
 
   total.value = userGroups.value.length
   console.log("用户组", userGroups.value)
 }
-const questionGroups = ref([] as any[])
+const questionGroups = ref([] as any[]) ?? []
 const showAnnouncementContent = ref()
 const showDescriptionContent = ref()
 const actionTime = ref()
 const endTime = ref()
 const timeLimit = ref()
+
+// onMounted(async () => {
+//   // 假设这里从后端获取数据
+//   const res = await QuestionGroupControllerService.listQuestionGroupByPageUsingPost();
+//   if (res.code === 0) {
+//     existedUserGroups.value = res.data;
+//   } else {
+//     message.error('获取用户组失败: ' + res.message);
+//   }
+// });
+
 const loadExamine = async () => {
   console.log("题目集id：" +props.id)
   const res = await QuestionGroupControllerService.getQuestionGroupByIdUsingGet(
       props.id as any,
   )
+  console.log("题目集数据", res.data)
   actionTime.value = res?.data?.actionTime as any
   endTime.value = res?.data?.endTime as any
   timeLimit.value = res?.data?.limitTime as any

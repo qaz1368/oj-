@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type UserGroup = {
     createTime?: string;
     description?: string;
@@ -13,4 +14,3 @@ export type UserGroup = {
     userId?: number;
     userIdList?: string;
 };
-

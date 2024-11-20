@@ -4,23 +4,21 @@
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_List_QuestionGroupVO_ } from '../models/BaseResponse_List_QuestionGroupVO_';
-import type { BaseResponse_List_UserGroup_ } from '../models/BaseResponse_List_UserGroup_';
 import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
 import type { BaseResponse_Page_QuestionGroup_ } from '../models/BaseResponse_Page_QuestionGroup_';
-import type { BaseResponse_Page_UserGroup_ } from '../models/BaseResponse_Page_UserGroup_';
 import type { BaseResponse_QuestionGroupVO_ } from '../models/BaseResponse_QuestionGroupVO_';
-import type { BaseResponse_UserGroupVO_ } from '../models/BaseResponse_UserGroupVO_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { QuestionGroupAddRequest } from '../models/QuestionGroupAddRequest';
 import type { QuestionGroupQueryRequest } from '../models/QuestionGroupQueryRequest';
 import type { QuestionGroupUpdateRequest } from '../models/QuestionGroupUpdateRequest';
-import type { UserGroupAddRequest } from '../models/UserGroupAddRequest';
-import type { UserGroupQueryRequest } from '../models/UserGroupQueryRequest';
-import type { UserGroupUpdateRequest } from '../models/UserGroupUpdateRequest';
+import type { QuestionGroupUpdateTimeRespquest } from '../models/QuestionGroupUpdateTimeRespquest';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+
 export class QuestionGroupControllerService {
+
     /**
      * addQuestionGroup
      * @param questionGroupAddRequest questionGroupAddRequest
@@ -29,8 +27,8 @@ export class QuestionGroupControllerService {
      * @throws ApiError
      */
     public static addQuestionGroupUsingPost(
-        questionGroupAddRequest: QuestionGroupAddRequest,
-    ): CancelablePromise<BaseResponse_long_ | any> {
+questionGroupAddRequest: QuestionGroupAddRequest,
+): CancelablePromise<BaseResponse_long_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/add',
@@ -42,20 +40,21 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * addExpAndAnn
-     * @param announcement
-     * @param explanation
-     * @param id
+     * @param announcement 
+     * @param explanation 
+     * @param id 
      * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static addExpAndAnnUsingPost(
-        announcement?: string,
-        explanation?: string,
-        id?: number,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+announcement?: string,
+explanation?: string,
+id?: number,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/addExpAndAnn',
@@ -71,18 +70,19 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * addQuestion
-     * @param questionGroupId
-     * @param questionIdList
+     * @param questionGroupId 
+     * @param questionIdList 
      * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static addQuestionUsingPost1(
-        questionGroupId?: number,
-        questionIdList?: Array<number>,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+questionGroupId?: number,
+questionIdList?: Array<number>,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/add_question',
@@ -97,18 +97,19 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * addUserGroup
-     * @param questionGroupId
-     * @param userGroupIdList
+     * @param questionGroupId 
+     * @param userGroupIdList 
      * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static addUserGroupUsingPost(
-        questionGroupId?: number,
-        userGroupIdList?: Array<number>,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+questionGroupId?: number,
+userGroupIdList?: Array<number>,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/add_usergroup',
@@ -123,6 +124,7 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * deleteQuestionGroup
      * @param deleteRequest deleteRequest
@@ -131,8 +133,8 @@ export class QuestionGroupControllerService {
      * @throws ApiError
      */
     public static deleteQuestionGroupUsingPost(
-        deleteRequest: DeleteRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+deleteRequest: DeleteRequest,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/deleteQuestionGroup',
@@ -144,18 +146,19 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * deleteQuestion
-     * @param questionGroupId
-     * @param questionIdList
+     * @param questionGroupId 
+     * @param questionIdList 
      * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static deleteQuestionUsingPost1(
-        questionGroupId?: number,
-        questionIdList?: Array<number>,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+questionGroupId?: number,
+questionIdList?: Array<number>,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/delete_question',
@@ -170,18 +173,19 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * deleteUserGroup
-     * @param questionGroupId
-     * @param userGroupIdList
+     * @param questionGroupId 
+     * @param userGroupIdList 
      * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static deleteUserGroupUsingPost1(
-        questionGroupId?: number,
-        userGroupIdList?: Array<number>,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+    public static deleteUserGroupUsingPost(
+questionGroupId?: number,
+userGroupIdList?: Array<number>,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/delete_userGroup',
@@ -196,6 +200,7 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * getQuestionGroupById
      * @param id id
@@ -203,8 +208,8 @@ export class QuestionGroupControllerService {
      * @throws ApiError
      */
     public static getQuestionGroupByIdUsingGet(
-        id?: number,
-    ): CancelablePromise<BaseResponse_QuestionGroupVO_> {
+id?: number,
+): CancelablePromise<BaseResponse_QuestionGroupVO_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/questiongroup/get',
@@ -218,6 +223,7 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * getAuthorizationQuestionGroup
      * @param userGroupId userGroupId
@@ -225,8 +231,8 @@ export class QuestionGroupControllerService {
      * @throws ApiError
      */
     public static getAuthorizationQuestionGroupUsingGet(
-        userGroupId?: number,
-    ): CancelablePromise<BaseResponse_List_QuestionGroupVO_> {
+userGroupId?: number,
+): CancelablePromise<BaseResponse_List_QuestionGroupVO_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/questiongroup/getAuthorizationQG',
@@ -240,6 +246,7 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * getQuestionGroupCount
      * @returns BaseResponse_long_ OK
@@ -256,6 +263,7 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * listQuestionGroupByPage
      * @param questionGroupQueryRequest questionGroupQueryRequest
@@ -264,8 +272,8 @@ export class QuestionGroupControllerService {
      * @throws ApiError
      */
     public static listQuestionGroupByPageUsingPost(
-        questionGroupQueryRequest: QuestionGroupQueryRequest,
-    ): CancelablePromise<BaseResponse_Page_QuestionGroup_ | any> {
+questionGroupQueryRequest: QuestionGroupQueryRequest,
+): CancelablePromise<BaseResponse_Page_QuestionGroup_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/list/page',
@@ -277,6 +285,7 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * updateQuestionGroup
      * @param questionGroupUpdateRequest questionGroupUpdateRequest
@@ -285,8 +294,8 @@ export class QuestionGroupControllerService {
      * @throws ApiError
      */
     public static updateQuestionGroupUsingPost(
-        questionGroupUpdateRequest: QuestionGroupUpdateRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+questionGroupUpdateRequest: QuestionGroupUpdateRequest,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/questiongroup/update',
@@ -298,30 +307,21 @@ export class QuestionGroupControllerService {
             },
         });
     }
+
     /**
      * updateQuestionGroupTime
-     * @param actionTime
-     * @param endTime
-     * @param id
-     * @param limitTime
+     * @param questionGroupUpdateTimeRespquest questionGroupUpdateTimeRespquest
      * @returns BaseResponse_boolean_ OK
+     * @returns any Created
      * @throws ApiError
      */
-    public static updateQuestionGroupTimeUsingGet(
-        actionTime?: string,
-        endTime?: string,
-        id?: number,
-        limitTime?: number,
-    ): CancelablePromise<BaseResponse_boolean_> {
+    public static updateQuestionGroupTimeUsingPost(
+questionGroupUpdateTimeRespquest: QuestionGroupUpdateTimeRespquest,
+): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/api/questiongroup/updateTime',
-            query: {
-                'actionTime': actionTime,
-                'endTime': endTime,
-                'id': id,
-                'limitTime': limitTime,
-            },
+            body: questionGroupUpdateTimeRespquest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -329,189 +329,22 @@ export class QuestionGroupControllerService {
             },
         });
     }
-    /**
-     * addUserGroup
-     * @param userGroupAddRequest userGroupAddRequest
-     * @returns BaseResponse_long_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static addUserGroupUsingPost1(
-        userGroupAddRequest: UserGroupAddRequest,
-    ): CancelablePromise<BaseResponse_long_ | any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/questiongroup/user_group/add',
-            body: userGroupAddRequest,
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * addUser
-     * @param userGroupId
-     * @param userIdList
-     * @returns BaseResponse_boolean_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static addUserUsingPost(
-        userGroupId?: number,
-        userIdList?: Array<number>,
+
+
+
+    public static updateQuestionScorePost(
+        questionGroupId?: number,
+        questionIdList?: Array<number>,
+        score?: number,
     ): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/questiongroup/user_group/add_user',
+            url: '/api/questiongroup/update_question_score',
             query: {
-                'userGroupId': userGroupId,
-                'userIdList': userIdList,
+                'questionGroupId': questionGroupId,
+                'questionIdList': questionIdList,
+                'score': score,
             },
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * deleteUserGroup
-     * @param deleteRequest deleteRequest
-     * @returns BaseResponse_boolean_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static deleteUserGroupUsingPost(
-        deleteRequest: DeleteRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/questiongroup/user_group/delete',
-            body: deleteRequest,
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * deleteUser
-     * @param userGroupId
-     * @param userIdList
-     * @returns BaseResponse_boolean_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static deleteUserUsingPost(
-        userGroupId?: number,
-        userIdList?: Array<number>,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/questiongroup/user_group/delete_user',
-            query: {
-                'userGroupId': userGroupId,
-                'userIdList': userIdList,
-            },
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * getUserGroupById
-     * @param id id
-     * @returns BaseResponse_UserGroupVO_ OK
-     * @throws ApiError
-     */
-    public static getUserGroupByIdUsingGet(
-        id?: number,
-    ): CancelablePromise<BaseResponse_UserGroupVO_> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/questiongroup/user_group/get',
-            query: {
-                'id': id,
-            },
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * getUserGroupCount
-     * @returns BaseResponse_long_ OK
-     * @throws ApiError
-     */
-    public static getUserGroupCountUsingGet(): CancelablePromise<BaseResponse_long_> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/questiongroup/user_group/getCount',
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * listUserGroupByPage
-     * @param userGroupQueryRequest userGroupQueryRequest
-     * @returns BaseResponse_Page_UserGroup_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static listUserGroupByPageUsingPost(
-        userGroupQueryRequest: UserGroupQueryRequest,
-    ): CancelablePromise<BaseResponse_Page_UserGroup_ | any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/questiongroup/user_group/list/page',
-            body: userGroupQueryRequest,
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * listUserGroupByUserId
-     * @returns BaseResponse_List_UserGroup_ OK
-     * @throws ApiError
-     */
-    public static listUserGroupByUserIdUsingGet(): CancelablePromise<BaseResponse_List_UserGroup_> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/questiongroup/user_group/listUserGroupByUserId',
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * updateUserGroup
-     * @param userGroupUpdateRequest userGroupUpdateRequest
-     * @returns BaseResponse_boolean_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static updateUserGroupUsingPost(
-        userGroupUpdateRequest: UserGroupUpdateRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/questiongroup/user_group/update',
-            body: userGroupUpdateRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

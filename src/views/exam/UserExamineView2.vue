@@ -83,30 +83,30 @@
                       <solution-list-view :questionId="props.id"></solution-list-view>
                     </div>
                     <div  style="height: 90vh; padding: 0;overflow-y: auto;"
-                         v-if="activeTab === 'records'">
+                          v-if="activeTab === 'records'">
                       <submission-record-view :questionId="props.id" :status="status1" :submitId="submitId"></submission-record-view>
                     </div>
                   </div>
                   <div v-if="activeTab === 'description' "
                        style="display: flex; height: 40px; align-items: center">
-<!--                    <div class="btn1">-->
-<!--                      <a-space>-->
-<!--                        <LikeOutlined/>-->
-<!--                        点赞-->
-<!--                      </a-space>-->
-<!--                    </div>-->
-<!--                    <div class="btn1">-->
-<!--                      <a-space>-->
-<!--                        <MessageOutlined/>-->
-<!--                        评论-->
-<!--                      </a-space>-->
-<!--                    </div>-->
-<!--                    <div class="btn1">-->
-<!--                      <a-space>-->
-<!--                        <StarOutlined/>-->
-<!--                        收藏-->
-<!--                      </a-space>-->
-<!--                    </div>-->
+                    <!--                    <div class="btn1">-->
+                    <!--                      <a-space>-->
+                    <!--                        <LikeOutlined/>-->
+                    <!--                        点赞-->
+                    <!--                      </a-space>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="btn1">-->
+                    <!--                      <a-space>-->
+                    <!--                        <MessageOutlined/>-->
+                    <!--                        评论-->
+                    <!--                      </a-space>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="btn1">-->
+                    <!--                      <a-space>-->
+                    <!--                        <StarOutlined/>-->
+                    <!--                        收藏-->
+                    <!--                      </a-space>-->
+                    <!--                    </div>-->
                   </div>
                 </div>
               </a-card>
@@ -156,9 +156,8 @@
                       <div
                           style="cursor: pointer; border-radius: 10px; width: 100%; display: flex; align-items: center;justify-content: right;">
                         <a-select v-model="form.language" :style="{width:'260px'} " placeholder="选择编程语言">
-                          <a-option>java</a-option>
-                          <a-option>python</a-option>
-                          <a-option>c++</a-option>
+                          <a-option @click="changeCode(form1.code)" value="c">c</a-option>
+                          <a-option @click="changeCode(form2.code)" value="java">java</a-option>
                         </a-select>
                       </div>
                     </div>
@@ -295,8 +294,9 @@ import ViewQuestionHeader from "@/components/ViewQuestionHeader.vue";
 import {IconBookmark, IconCalendarClock, IconCode, IconExperiment} from "@arco-design/web-vue/es/icon";
 import CodeEditor from "@/components/CodeEditor.vue";
 import {
+  ExamControllerService,
   QuestionControllerService,
-  QuestionSubmitAddRequest,
+  QuestionSubmitAddRequest, QuestionSubmitControllerService,
 
   QuestionVO
 } from "../../../generated";
@@ -393,7 +393,7 @@ const getRunResultUUID = async (e: any) => {
   isLoading.value = true
   let res = ref();
 
-    res = await QuestionControllerService.getRunResultUsingPost(runResultUUID.value)
+  res = await QuestionSubmitControllerService.getRunResultUsingPost(runResultUUID.value)
 
 
 
@@ -403,8 +403,8 @@ const getRunResultUUID = async (e: any) => {
 
   console.log("输出:" + runResultOutPut?.value)
   console.log(typeof runResultOutPut == "undefined")
-    isLoading.value = false
-    spinning.value = false;
+  isLoading.value = false
+  spinning.value = false;
 
 
 
@@ -420,7 +420,16 @@ const form = ref<QuestionSubmitAddRequest>({
   code: "import java.util.*; \n\npublic class Main {\n    public static void main(String[] args) {\n      //请在此处编写代码\n    }\n}",
   questionId: props.id as any
 })
-
+const form1 = ref<QuestionSubmitAddRequest>({
+  language: "c",
+  code: "#include <stdio.h>\n\nint main() {\n    // 请在此处编写代码\n    return 0;\n}",
+  questionId: props.id as any
+});
+const form2 = ref<QuestionSubmitAddRequest>({
+  language: "java",
+  code: "import java.util.*; \n\npublic class Main {\n    public static void main(String[] args) {\n      //请在此处编写代码\n    }\n}",
+  questionId: props.id as any
+})
 const changeCode = (value:string) => {
   form.value.code = value;
 }
@@ -462,7 +471,12 @@ const loadData = async () => {
   }
 }
 const msg = router.currentRoute.value.query.msg
-activeTab.value = msg as any
+if(msg !== null && msg !== '' && msg !== undefined) {
+  activeTab.value = msg as any
+}
+
+
+
 onMounted(() => {
   loadData()
 })

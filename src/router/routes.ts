@@ -82,7 +82,7 @@ export const routes: Array<RouteRecordRaw> = [
         name: '题目集 ',
         component: UserExamQuestionView,
         meta: {
-            access: [ACCESS_ENUM.ADMIN]
+            access: [ACCESS_ENUM.ADMIN, ACCESS_ENUM.USER, ACCESS_ENUM.TEACHER]
         },
         children: [
             {

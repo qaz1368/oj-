@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type QuestionGroupUpdateRequest = {
-    groupName?: string;
+export type QuestionGroupUpdateTimeRespquest = {
+    actionTime?: string;
+    endTime?: string;
     id?: number;
-    questionIdList?: Array<number>;
-    userGroupIdList?: Array<number>;
+    limitTime?: number;
 };

@@ -4,18 +4,18 @@
       <a-layout style="min-height: 100vh">
         <a-layout-header class="header">
           <a-space >
-            <img src="@/assets/ndnu-oj-logo.png" class="logo">
+            <img src="@/assets/YHLOGO_result.png" class="logo">
 
-            <div style="font-size: 32px; font-weight: 700">宁师-OJ</div>
+            <div style="font-size: 32px; font-weight: 700">自动判题系统</div>
           </a-space>
 
         </a-layout-header>
         <a-layout-content class="content">
           <router-view/>
         </a-layout-content>
-        <a-layout-footer class="footer">
-          NDNU-OJ
-        </a-layout-footer>
+<!--        <a-layout-footer class="footer">-->
+<!--          NDNU-OJ-->
+<!--        </a-layout-footer>-->
       </a-layout>
     </div>
 

@@ -2,8 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 import type { Question } from './Question';
 import type { UserGroupVO } from './UserGroupVO';
+
 export type QuestionGroupVO = {
     actionTime?: string;
     announcement?: string;
@@ -22,4 +24,3 @@ export type QuestionGroupVO = {
     userGroupList?: Array<UserGroupVO>;
     userId?: number;
 };
-

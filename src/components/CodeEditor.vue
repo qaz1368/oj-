@@ -1,15 +1,15 @@
 <template>
   <div id="code-editor" ref="codeEditorRef" style="min-height: 90vh" />
   {{ value }}
-<!--  <a-button @click="fillValue">填充值</a-button>-->
+  <!-- <a-button @click="fillValue">填充值</a-button> -->
 </template>
 
 <script setup lang="ts">
-import * as monaco from "monaco-editor"
-import {onMounted, ref, toRaw, watch} from "vue";
+import { ref, watch, toRaw, onMounted, onBeforeUnmount } from 'vue';
+import * as monaco from 'monaco-editor';
 
 const codeEditorRef = ref();
-const codeEditor = ref();
+let editorInstance = null;
 
 interface Props {
   value: string;
@@ -19,64 +19,62 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   value: () => "",
-  language: () => "java",
-  handleChange:(v: string) => {
-    console.log(v)
+  language: () => "c",
+  handleChange: (v: string) => {
+    console.log(v);
   }
-})
-// const fillValue = () => {
-//   if (!codeEditor.value) {
-//     return;
-//   }
-//   // 改变值
-//   toRaw(codeEditor.value).setValue("新的值");
-// };
+});
 
-watch([props.language], ()=> {
-  codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-    value: props.value,
-    language: props.language,
-    automaticLayout: true,
-    colorDecorators: true,
-    minimap: {
-      enabled: true,
+const createEditor = () => {
+  if (codeEditorRef.value) {
+    requestAnimationFrame(() => {
+      console.log("Creating editor with language:", props.language);
+      editorInstance = monaco.editor.create(codeEditorRef.value, {
+        value: props.value,
+        language: props.language,
+        automaticLayout: true,
+        colorDecorators: true,
+        minimap: {
+          enabled: true,
+        },
+        readOnly: false,
+        theme: "vs-dark",
+      });
 
-    },
-    readOnly: false,
-    theme: "vs-adrk",
-    // lineNumbers: "off",
-    // roundedSelection: false,
-    // scrollBeyondLastLine: false,
-  });
-})
+      // 注册内容变化监听
+      if (editorInstance) {
+        editorInstance.onDidChangeModelContent(() => {
+          console.log("目前内容为：", editorInstance.getValue());
+          props.handleChange(toRaw(editorInstance.getValue()));
+        });
+      }
+    });
+  }
+};
+
+const destroyEditor = () => {
+  if (editorInstance) {
+    editorInstance.dispose();
+    editorInstance = null;
+  }
+};
+
+watch(
+    () => props.language,
+    () => {
+      destroyEditor();
+      createEditor();
+    }
+);
 
 onMounted(() => {
-  if (!codeEditorRef.value) {
-    return;
-  }
-  // Hover on each property to see its docs!
-  codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-    value: props.value,
-    language: props.language,
-    automaticLayout: true,
-    colorDecorators: true,
-    minimap: {
-      enabled: true,
+  createEditor();
+});
 
-    },
-    readOnly: false,
-    theme: "vs-dark",
-    // lineNumbers: "off",
-    // roundedSelection: false,
-    // scrollBeyondLastLine: false,
-  });
-
-  // 编辑 监听内容变化
-  codeEditor.value.onDidChangeModelContent(() => {
-    console.log("目前内容为：", );
-    props.handleChange(toRaw(codeEditor.value).getValue())
-  });
+onBeforeUnmount(() => {
+  destroyEditor();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

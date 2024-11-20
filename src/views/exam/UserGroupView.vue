@@ -98,7 +98,8 @@ import {
 import {ref} from "vue";
 import {FundProjectionScreenOutlined, PlusOutlined, TeamOutlined,WarningOutlined} from "@ant-design/icons-vue";
 import {useRouter} from "vue-router";
-import {QuestionGroupControllerService} from "../../../generated";
+import {QuestionGroupControllerService,
+  UserGroupControllerService} from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
 import {onMounted} from "@vue/runtime-core";
 const router = useRouter()
@@ -120,7 +121,7 @@ const showModal = () => {
 }
 const dataList = ref<any[]>([])
 const handleOk = async (e: MouseEvent) => {
-  const res = await QuestionGroupControllerService.addUserGroupUsingPost1(form.value)
+  const res = await UserGroupControllerService.addUserGroupUsingPost1(form.value)
   if (res.code === 0) {
     message.success('创建成功')
   }else  {
@@ -134,7 +135,7 @@ const handleCancel = () => {
   open.value = false;
 }
 const loadData = async () => {
-  const res = await QuestionGroupControllerService.listUserGroupByPageUsingPost(searchParams.value)
+  const res = await UserGroupControllerService.listUserGroupByPageUsingPost(searchParams.value)
   if (res.code === 0) {
     dataList.value = res.data.records
     total.value = res.data.total

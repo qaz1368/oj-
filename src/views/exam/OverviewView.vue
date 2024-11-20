@@ -88,6 +88,7 @@ import { IconUserGroup,  } from '@arco-design/web-vue/es/icon';
 import {
   QuestionControllerService,
   QuestionGroupControllerService,
+  UserGroupControllerService,
 } from "../../../generated";
 import {onMounted} from "@vue/runtime-core";
 import {computed, ref} from "vue";
@@ -125,7 +126,7 @@ const getProblemsSetCount = async () => {
 }
 const UserGroupCount = ref()
 const getUserGroupCount = async () => {
-  const res = await QuestionGroupControllerService.getUserGroupCountUsingGet()
+  const res = await UserGroupControllerService.getUserGroupCountUsingGet()
   // const res = await UserGroupControllerService.getCountUsingGet1()
   UserGroupCount.value = res.data
 }
@@ -149,7 +150,7 @@ const getQuestionGroupListByLatestTime = async () => {
   }
 }
 const getUserGroupListByLatestTime = async () => {
-  const res = await QuestionGroupControllerService.listUserGroupByPageUsingPost({
+  const res = await UserGroupControllerService.listUserGroupByPageUsingPost({
     sortField: 'latestTime',
     sortOrder: "descend",
     current: 1,

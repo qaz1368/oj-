@@ -2,7 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 import type { QuestionVO } from './QuestionVO';
+
 export type ExamSubmitVO = {
     code?: string;
     examId?: number;
@@ -12,4 +14,3 @@ export type ExamSubmitVO = {
     score?: number;
     updateTime?: string;
 };
-

@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type QuestionQueryRequest = {
     acceptedNum?: number;
     answer?: string;
@@ -16,4 +17,3 @@ export type QuestionQueryRequest = {
     title?: string;
     userId?: number;
 };
-

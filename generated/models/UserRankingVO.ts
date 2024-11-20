@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Entry_string_int_ = {
-    key?: string;
-    value?: number;
-};
 
+export type UserRankingVO = {
+    acceptNum?: string;
+    userName?: string;
+};

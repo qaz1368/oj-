@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type Exam = {
     actionTime?: string;
     examSubmitIdList?: string;
@@ -13,4 +14,3 @@ export type Exam = {
     submitTime?: string;
     userId?: number;
 };
-

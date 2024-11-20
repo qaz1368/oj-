@@ -30,8 +30,8 @@
     <ant-form-item>
 
       <ant-form-item name="remember" no-style>
-        <a href="/user/register" style="float: left; ">去注册</a>
-        <a class="login-form-forgot" href="" style="float: right">忘记密码</a>
+        <a href="/user/register" style="float: right; ">去注册</a>
+<!--        <a class="login-form-forgot" href="" style="float: right">忘记密码</a>-->
       </ant-form-item>
 
     </ant-form-item>

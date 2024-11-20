@@ -163,11 +163,11 @@ import {
 } from 'ant-design-vue';
 import {
   ExamControllerService,
-   QuestionGroupControllerService,
+  QuestionGroupControllerService,
   QuestionSubmitAddRequest,
   QuestionControllerService,
   UserControllerService,
-  UserUpdateMyRequest
+  UserUpdateMyRequest, QuestionSubmitControllerService, ExamSubmitControllerService
 } from "../../../generated"
 import {computed, ref, toRefs, defineExpose} from "vue";
 import message from "@arco-design/web-vue/es/message";
@@ -207,7 +207,7 @@ const props = defineProps({
   isclose: Boolean,
   timeLimit: Number,
   endTime: ref,
-  questionId: Number,
+  questionId: String,
   examId: Number,
 })
 
@@ -308,7 +308,7 @@ const doSubmit = async () => {
   if (props.examId === undefined) {
     return
   }
-  const res = await ExamControllerService.submitExamUsingPost({
+  const res = await ExamSubmitControllerService.submitExamUsingPost({
     code: info.value.code,
     examId: props.examId,
     language: info.value.language,
@@ -330,7 +330,8 @@ const runQuestion = async () => {
   if (inputList?.value === undefined || inputList?.value?.length === 0) {
     return
   }
-  const res = await QuestionControllerService.runQuestionUsingPost({
+  console.log("运行参数", info.value.questionId)
+  const res = await QuestionSubmitControllerService.runQuestionUsingPost({
     // code: info.value.code.replace(/\\r\\n/g,"\n"),
     code: info.value.code,
     inputList: inputList.value,

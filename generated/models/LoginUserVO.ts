@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type LoginUserVO = {
     createTime?: string;
     id?: number;
@@ -11,4 +12,3 @@ export type LoginUserVO = {
     userProfile?: string;
     userRole?: string;
 };
-

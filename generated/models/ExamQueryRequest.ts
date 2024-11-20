@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type ExamQueryRequest = {
     current?: number;
     pageSize?: number;
@@ -10,4 +11,3 @@ export type ExamQueryRequest = {
     sortOrder?: string;
     userId?: number;
 };
-

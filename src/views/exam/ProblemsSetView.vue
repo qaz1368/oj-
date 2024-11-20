@@ -202,14 +202,20 @@ const deleteQuestionGroup = async (id: number) => {
   }
   await loadData()
 }
-const startTimeChange = (value: Dayjs) => {
-  startTime1.value = value
-  timeSearchParams.value.actionTime = new Date(value.toString()).getTime() as any
-}
-const endTimeChange = (value: Dayjs) => {
-  endTime1.value = value
-  timeSearchParams.value.endTime = new Date(value.toString()).getTime() as any
-}
+const startTimeChange = (value: Dayjs | undefined) => {
+  if (value) {
+    startTime1.value = value;
+    timeSearchParams.value.actionTime = new Date(value.toString()).getTime();
+  }
+};
+
+const endTimeChange = (value: Dayjs | undefined) => {
+  if (value) {
+    endTime1.value = value;
+    timeSearchParams.value.endTime = new Date(value.toString()).getTime();
+  }
+};
+
 const endTimeOk = (value: Dayjs) => {
   endTime1.value = value
   timeSearchParams.value.endTime = new Date(value.toString()).getTime() as any

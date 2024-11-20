@@ -27,31 +27,35 @@
           </div>
         </div>
         <div v-else>
-          <div v-for="(item, index) in existedQuestions">
-            <div
-                style="display: flex; justify-content: space-between ;background: #f6f7f9; border-radius: 10px; padding: 10px 20px 10px 20px; min-height: 50px;margin-bottom: 10px; align-items: center">
+          <div v-for="(item, index) in existedQuestions" :key="item.id">
+            <div        style="display: flex; justify-content: space-between; background: #f6f7f9; border-radius: 10px; padding: 10px 20px; min-height: 50px; margin-bottom: 10px; align-items: center"
+            >
               <div style="display: flex; flex-direction: column">
                 <div style="font-size: 16px; font-weight: 500; margin-left: 10px">
                   {{ item.title }}
                 </div>
                 <div style="margin-top: 10px;">
-                  <Tag
+                  <a-tag
                       v-for="tag in JSON.parse(item.tags)"
-                      :key="tag"
-                      style="font-size: 14px; "
+                      :key="tag"              style="font-size: 14px;"
                       color="green"
                   >
                     {{ tag }}
-                  </Tag>
+                  </a-tag>
                 </div>
-
               </div>
-              <div>
-                <Button @click="deleteQuestion(item.id)" type="primary">删除题目</Button>
+              <div style="display: flex; align-items: center">
+                <a-input-number
+                    v-model="item.score"
+                    :min="0"            style="width: 80px; margin-right: 10px"
+                    @change="updateTotalScore(item)"
+                />
+                <a-button @click="deleteQuestion(item.id)" type="primary">删除题目</a-button>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
     <Modal v-model:open="open" title="添加题目" @ok="handleOk" width="1000px">
@@ -164,7 +168,7 @@ import {Checkbox} from '@arco-design/web-vue'
 import {IconCode} from "@arco-design/web-vue/es/icon";
 import MdViewer from "@/components/MdViewer.vue";
 import message from "@arco-design/web-vue/es/message";
-
+import axios from 'axios';
 interface Props {
   id: any
 }
@@ -203,14 +207,13 @@ const forbiddenAddQuestion = (item: any) => {
 }
 const open = ref(false)
 const visible = ref(false)
-const handleOk =  async () => {
-  console.log(needAddQuestion.value)
-  const res = await QuestionGroupControllerService.addQuestionUsingPost1(
-      props.id,
-      needAddQuestion.value)
-  await getExistedQuestions()
-  //TODO 添加用户
-  open.value = false
+// 提交按钮
+const handleOk = async () => {
+  console.log(needAddQuestion.value);
+  const res = await QuestionGroupControllerService.addQuestionUsingPost1(props.id, needAddQuestion.value);
+  await getExistedQuestions();
+  // TODO 添加用户
+  open.value = false;
 }
 const handleCancel = () => {
   open.value = false
@@ -230,33 +233,65 @@ const allQuestions = ref([] as any[])
  * 获取题目集已存在的题目
  */
 const existedQuestionIds = ref([] as any[])
-const totalScore = ref(0)
-const flag = ref(true)
-const getExistedQuestions = async () => {
-  const res = await QuestionGroupControllerService.getQuestionGroupByIdUsingGet(props.id)
+  const totalScore = ref(0)
+  const flag = ref(true)
+  const id=ref()
+  const getExistedQuestions = async () => {
+    const res = await QuestionGroupControllerService.getQuestionGroupByIdUsingGet(props.id);
+    if (res.code === 0 && res.data) {
+      existedQuestions.value = res.data.questionList as any[];
+      console.log("existedQuestions.value",existedQuestions.value)
+      id.value = res.data.id; // 存储 res.data.id 到 id
+    } else {
+      existedQuestions.value = [];
+      id.value = undefined; // 确保 id 被正确初始化
+    }
   if (res.code === 0) {
-    existedQuestions.value = res?.data?.questionList as any[]
+    existedQuestions.value = res?.data?.questionList as any[];
   }
-  existedQuestionIds.value = []
+  existedQuestionIds.value = [];
   existedQuestions.value.forEach((question: any) => {
-    existedQuestionIds.value.push(question.id)
-  })
-  if (existedQuestions.value.length > 0 && flag.value) {
+    existedQuestionIds.value.push(question.id);
+  });
+
+  // 重置 totalScore
+  totalScore.value = 0;
+
+  if (existedQuestions.value.length > 0) {
     existedQuestions.value.forEach((question: any) => {
-      // 现有的代码
-      if(question.questionDegree === 0) {
-        totalScore.value += 10
-      }else if(question.questionDegree === 1) {
-        totalScore.value += 15
-      }else {
-        totalScore.value += 20
-      }
-    })
-    flag.value = false
+      totalScore.value += question.score;
+      // 如果需要根据 questionDegree 计算额外分数，可以取消注释以下代码
+      // if (question.questionDegree === 0) {
+      //   totalScore.value += 10;
+      // } else if (question.questionDegree === 1) {
+      //   totalScore.value += 15;
+      // } else {
+      //   totalScore.value += 20;
+      // }
+    });
   }
 }
+// 定义一个响应式变量来存储请求结果
+const response = ref(null);
+
+async function updateTotalScore(item: any) {
+  // 在这里可以使用 item 参数
+  console.log("item", item);
+
+  try {
+    // 假设 item 包含 userGroupIdList 和 score
+    const questionIdList = item.questionIdList;
+    const score = item.score;
+
+    const res = await QuestionGroupControllerService.updateQuestionScorePost(id.value, item.id,score);
 
 
+    // 更新总分
+    totalScore.value = existedQuestions.value.reduce((sum, q) => sum + (q.score || 0), 0);
+  } catch (error) {
+    console.error('更新分数失败:', error);
+  }
+}
 
 const total = ref(0)
 const getAllQuestions = async () => {

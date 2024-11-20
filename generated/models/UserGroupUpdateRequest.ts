@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type UserGroupUpdateRequest = {
     groupName?: string;
     id?: number;
     userIdList?: Array<number>;
 };
-

@@ -290,7 +290,7 @@ const handleOk = async (e: MouseEvent) => {
   open.value = true;
   let res = null
   if (userModal.value === '新增用户') {
-    res = await UserControllerService.addUserUsingPost1({
+    res = await UserControllerService.addUserUsingPost({
       userName: form.value.userName,
       userRole: form.value.userRole,
       userAccount: form.value.userAccount,
@@ -456,7 +456,7 @@ const loadData = async () => {
  * @param id
  */
 const doDelete = async (id: number) => {
-  const res = await UserControllerService.deleteUserUsingPost1({
+  const res = await UserControllerService.deleteUserUsingPost({
     id: id
   })
   if (res.code === 0) {

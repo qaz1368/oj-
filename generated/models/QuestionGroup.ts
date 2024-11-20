@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type QuestionGroup = {
     actionTime?: string;
     announcement?: string;
@@ -20,4 +21,3 @@ export type QuestionGroup = {
     userGroupIdList?: string;
     userId?: number;
 };
-

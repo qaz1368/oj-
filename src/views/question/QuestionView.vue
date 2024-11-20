@@ -2,6 +2,7 @@
   <div id="questionView">
     <a-row :gutter="24">
       <a-col :span="18">
+
         <Card
             style="border-radius: 15px; height: 100%; margin-top: 10px; margin-left: -10px;box-shadow: 0 2px 6px rgba(7,0,0,0.06),0 4px 8px rgba(7,0,0,0.06),0 6px 12px rgba(7,0,0,0.06)">
           <div style="display: flex; flex-direction: row">
@@ -255,7 +256,7 @@
 </template>
 <script lang="ts" setup>
 import {SmileOutlined, DownOutlined} from '@ant-design/icons-vue';
-import {computed, nextTick, ref} from "vue";
+import {computed, h, nextTick, ref} from "vue";
 import {
   ExamControllerService,
   QuestionControllerService,
@@ -297,7 +298,7 @@ import {
   Progress,
   Menu,
   MenuItem,
-  Calendar
+  Calendar, notification
 } from 'ant-design-vue';
 import {useRoute, useRouter} from "vue-router";
 import MdEditor from "@/components/MdEditor.vue";
@@ -667,8 +668,28 @@ const getDifferentQuestionCount = async () => {
   allDifficultQuestionCount.value = res.data?.difficulty as any;
 }
 
-const sendMessage = () => {
-  const res = UserControllerService.getNowQuestionGroupUsingGet()
+
+const flag = ref(true);
+const msgData = ref([] as any[])
+const sendMessage = async () => {
+  const res = await UserControllerService.getNowQuestionGroupUsingGet()
+  if (res.code == 0){
+    msgData.value = res.data as any
+  }
+  if (msgData.value.length > 0 && flag) {
+    notification.warning({
+      message: '您有考试即将开始',
+      description:
+          '请立即前往题目集页做题！',
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+      icon: () => h(ExclamationCircleOutlined, {style: 'color: red'}),
+    }
+
+    );
+    flag.value = false
+  }
 }
 
 onMounted(() => {

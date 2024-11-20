@@ -2,8 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 import type { Exam } from './Exam';
 import type { QuestionVO } from './QuestionVO';
+
 export type ExamAllSubmitVO = {
     code?: string;
     exam?: Exam;
@@ -13,4 +15,3 @@ export type ExamAllSubmitVO = {
     score?: number;
     updateTime?: string;
 };
-

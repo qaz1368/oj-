@@ -119,7 +119,12 @@ import {onMounted} from "@vue/runtime-core";
 import {useStore} from "vuex";
 import moment from "moment/moment";
 import {useRouter} from "vue-router";
-import {QuestionControllerService} from "../../generated";
+import {
+  ExamControllerService, ExamSubmitControllerService,
+  QuestionControllerService,
+  QuestionGroupControllerService,
+  QuestionSubmitControllerService
+} from "../../generated";
 
 const props = defineProps({
   submitId: String,
@@ -144,7 +149,7 @@ const submitRecord = ref({})
 
 const getSubmitRecordById = async () => {
 
-  const res = await QuestionControllerService.getSubmitResultUsingGet(submitId?.value as any)
+  const res = await ExamSubmitControllerService.submitExamUsingPost(submitId?.value as any)
   submitRecord.value = res.data
 
 }
@@ -158,7 +163,7 @@ const getAllSubmitRecords = async () => {
   if (store.state.user.loginUser.userName === '未登录') {
     return false
   }
-  const res = await QuestionControllerService.listQuestionSubmitByPageUsingPost(getAllSubmitRecordsSearchParams.value)
+  const res = await QuestionSubmitControllerService.listQuestionSubmitByPageUsingPost(getAllSubmitRecordsSearchParams.value)
   spinning.value = false
   allSubmitRecords.value = res.data.records
 
@@ -172,7 +177,7 @@ const backAllRecords = () => {
 }
 onMounted(() => {
   getAllSubmitRecords()
-  getSubmitRecordById()
+  // getSubmitRecordById()
 })
 
 

@@ -1,7 +1,7 @@
 <template>
   <div id="solutionListView">
     <div style="display: flex; justify-content: right; margin-bottom: 10px">
-      <Button type="primary" @click="createSolution">创建题解</Button>
+      <Button type="primary" v-if="store.state.user.loginUser.userRole === 'admin'" @click="createSolution">创建题解</Button>
     </div>
     <div>
       <div v-for="item in solutionList">
@@ -60,15 +60,18 @@
 import {defineProps, reactive, ref, toRefs} from "vue";
 import {useRoute} from "vue-router";
 import {onMounted} from "@vue/runtime-core";
-import {QuestionControllerService} from "../../generated";
+import {AnswerControllerService, QuestionControllerService} from "../../generated";
 import {Button, Dropdown, Form, FormItem, Input, Menu, MenuItem, Modal, Space, Tag, Textarea} from 'ant-design-vue'
 import MdEditor from "@/components/MdEditor.vue";
 import {DownOutlined, MinusCircleOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import message from "@arco-design/web-vue/es/message";
 import MdViewer from "@/components/MdViewer.vue";
+import axios from "axios";
+import {useStore} from "vuex";
 const route = useRoute()
 const showAddSolution = ref(false)
 const loading = ref<boolean>(false);
+const store = useStore()
 const props = defineProps({
   questionId: String
 })
@@ -140,7 +143,7 @@ const toSolutionView = () => {
 }
 
 const deleteSolution = async (SolutionId: number) => {
-  const res = await QuestionControllerService.deleteAnswerUsingPost({
+  const res = await getSubmitResultUsingGet.deleteAnswerUsingPost({
     id: SolutionId
   })
   if (res.code === 0) {
@@ -151,7 +154,8 @@ const deleteSolution = async (SolutionId: number) => {
   await getSolutionList()
 }
 const addQuestionSolution = async () => {
-  const res = await QuestionControllerService.addAnswerUsingPost(addSolutionForm.value)
+  // const res = await axios.post("http://localhost:8101/api/question/answer/add", addSolutionForm);
+  const res = await getSubmitResultUsingGet.addAnswerUsingPost(addSolutionForm.value)
   if(res.code === 0) {
     message.success('创建成功')
   }else {
@@ -176,7 +180,7 @@ const addSolutionForm = ref({
   questionId: questionId?.value as any
 })
 const getSolutionList = async () => {
-  const res = await QuestionControllerService.listAnswerByPageUsingPost(searchParams.value)
+  const res = await AnswerControllerService.listAnswerByPageUsingPost(searchParams.value)
   if(res.code === 0) {
     solutionList.value = res.data.records
   }

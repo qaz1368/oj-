@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import {Pagination, Table, NotificationPlacement, notification, Tag} from "ant-design-vue";
-import {ExamControllerService} from "../../../generated";
+import {ExamControllerService, ExamSubmitControllerService} from "../../../generated";
 import {onMounted} from "@vue/runtime-core";
 import {ref, h} from "vue";
 import {ExclamationCircleOutlined, SmileOutlined} from "@ant-design/icons-vue";
@@ -90,7 +90,7 @@ const searchParams = ref({
 const examSubmitList = ref([] as any[])
 const getExamSubmitList = async () => {
 
-  const res = await ExamControllerService.listExamAllSubmitVoUsingPost(searchParams.value)
+  const res = await ExamSubmitControllerService.listExamAllSubmitVoUsingPost(searchParams.value)
   if (res.code === 0) {
     examSubmitList.value = res.data as any[]
     total.value = res.total

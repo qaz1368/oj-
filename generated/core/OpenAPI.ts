@@ -27,6 +27,6 @@ export const OpenAPI: OpenAPIConfig = {
     TOKEN: undefined,
     USERNAME: undefined,
     PASSWORD: undefined,
-    HEADERS: undefined,
+    HEADERS: {contentType: 'application/json;charset=UTF-8'},
     ENCODE_PATH: undefined,
 };

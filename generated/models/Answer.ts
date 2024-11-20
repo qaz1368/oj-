@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type Answer = {
     code?: string;
     content?: string;
@@ -13,4 +14,3 @@ export type Answer = {
     updateTime?: string;
     userId?: number;
 };
-

@@ -137,9 +137,8 @@
                       <div
                           style="cursor: pointer; border-radius: 10px; width: 100%; display: flex; align-items: center;justify-content: right;">
                         <a-select v-model="form.language" :style="{width:'260px'} " placeholder="选择编程语言">
-                          <a-option>java</a-option>
-                          <a-option>python</a-option>
-                          <a-option>c++</a-option>
+                          <a-option @click="changeCode(form1.code)" value="c">c</a-option>
+                          <a-option @click="changeCode(form2.code)" value="java">java</a-option>
                         </a-select>
                       </div>
                     </div>
@@ -287,7 +286,7 @@
           <AEmpty></AEmpty>
         </div>
         <div v-else v-for="item in examQuestions">
-          <div @click="goQuestion(item.id)" style=" cursor: pointer; background:#f2f3f5; border-radius: 10px; padding: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center">
+          <div @click="goQuestion(String(item.id))" style=" cursor: pointer; background:#f2f3f5; border-radius: 10px; padding: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center">
             <div>
               <div style="font-size: 16px; font-weight: 500; color: #000000; margin-left: 5px">
                 {{ item.title }}
@@ -356,6 +355,7 @@ import {IconBookmark, IconCalendarClock, IconCode, IconExperiment, IconArrowLeft
 import CodeEditor from "@/components/CodeEditor.vue";
 import {
   ExamControllerService,
+  QuestionSubmitControllerService,
   QuestionControllerService, QuestionGroupControllerService,
   QuestionSubmitAddRequest,
   QuestionVO
@@ -485,23 +485,31 @@ const runResult = ref<[any, any]>()
 const runResultOutPut = ref();
 const runResultMessage = ref();
 const getRunResultUUID = async (e: any) => {
-  spinning.value = true;
-  runResultUUID.value = e
-  testView.value = "result"
-  isLoading.value = true
-  const res = await QuestionControllerService.getRunResultUsingPost(runResultUUID.value)
+     spinning.value = true;
+     runResultUUID.value = e;
+     testView.value = "result";
+     isLoading.value = true;
+     console.log("runResultUUID", e)
+     try {
+       const res = await QuestionSubmitControllerService.getRunResultUsingPost(runResultUUID.value);
 
-  runResult.value = [res.data[0], res.data[1]]
-  runResultOutPut.value = res.data[0];
-  runResultMessage.value = res.data[1]
+       // 检查 res.data 是否为 null 或 undefined
+       const data = res?.data || [];
 
-  console.log("输出:" + runResultOutPut?.value)
-  console.log(typeof runResultOutPut == "undefined")
-  isLoading.value = false
-  spinning.value = false;
+       runResult.value = [data[0], data[1]];
+       runResultOutPut.value = data[0];
+       runResultMessage.value = data[1];
 
+       console.log("输出:" + runResultOutPut?.value);
+       console.log(typeof runResultOutPut === "undefined");
+     } catch (error) {
+       console.error('Error fetching run result:', error);
+     } finally {
+       isLoading.value = false;
+       spinning.value = false;
+     }
+   };
 
-}
 
 interface Props {
   id: string
@@ -536,11 +544,22 @@ const getExamQuestions = async () => {
 
 }
 
-const examQuestionId = ref("1777256867446157313")
+let examQuestionId = examQuestions.value[0]?.questionId;
+
 const form = ref<QuestionSubmitAddRequest>({
+  language: "c",
+  code: "#include <stdio.h>\n\nint main() {\n    // 请在此处编写代码\n    return 0;\n}",
+  questionId: examQuestionId as any
+})
+const form1 = ref<QuestionSubmitAddRequest>({
+  language: "c",
+  code: "#include <stdio.h>\n\nint main() {\n    // 请在此处编写代码\n    return 0;\n}",
+  questionId: examQuestionId as any
+});
+const form2 = ref<QuestionSubmitAddRequest>({
   language: "java",
   code: "import java.util.*; \n\npublic class Main {\n    public static void main(String[] args) {\n      //请在此处编写代码\n    }\n}",
-  questionId: examQuestionId.value as any
+  questionId: examQuestionId as any
 })
 
 const changeCode = (value: string) => {
@@ -578,6 +597,10 @@ const loadData = async (questionId?: any) => {
       questionId
   )
   if (res.code === 0) {
+    examQuestionId = String(questionId)
+    form.value.questionId = questionId
+
+    console.log("题目id:",questionId)
     question.value = res.data
   } else {
     message.error("加载失败:" + res.message)

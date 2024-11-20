@@ -102,6 +102,7 @@
           <div v-for="(item, index) in dataList" style="display:flex; justify-content: space-between; align-items: center; padding-left: 10px">
             <div style="height: 60px; padding: 10px 0 10px 0; margin: 10px 0 10px 0" class="selectDiv">
               <Checkbox @change="addUserToUserGroup(item)"
+
                         :default-checked="userIds.includes(item.id) ?? false"
                         :disabled="userIds.includes(item.id)"
                         style="margin-left: 20px">
@@ -149,7 +150,7 @@ import {
 import moment from "moment/moment";
 import {DownOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {ref} from "vue";
-import {QuestionGroupControllerService, UserControllerService} from "../../../generated";
+import {QuestionGroupControllerService, UserControllerService, UserGroupControllerService} from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
 import {onMounted} from "@vue/runtime-core";
 import {Checkbox} from "@arco-design/web-vue";
@@ -264,7 +265,7 @@ const showModal = () => {
 
 const doDelete = async (id: number) => {
 
-  const res = await QuestionGroupControllerService.deleteUserUsingPost(props.id, [id]);
+  const res = await UserGroupControllerService.deleteUserUsingPost1(props.id, [id]);
   if (res.code === 0) {
     userIds.value = []
     message.success("删除成功");
@@ -277,10 +278,13 @@ const doDelete = async (id: number) => {
   })
   await getUserGroupById()
   await loadData()
+
+  console.log("userIds.value的值是",userIds.value)
 }
 
 const allUserIds = ref([] as any[])
 const loadData = async () => {
+
 
   const res = await UserControllerService.listUserByPageUsingPost(
       searchParams.value
@@ -298,23 +302,35 @@ const loadData = async () => {
   })
 }
 const handleOk = async (e: MouseEvent) => {
-  const list = ref([] as any[])
+  // 检查是否有用户需要添加
+  if (needAddUser.value.length === 0) {
+    message.warning("请选择要添加的用户");
+    return;
+  }
 
-  const res = await QuestionGroupControllerService.addUserUsingPost(
-      props.id,needAddUser.value
+  const res = await UserGroupControllerService.addUserUsingPost1(
+      props.id,
+      needAddUser.value
   );
+
   if (res.code === 0) {
     message.success("添加成功");
-  }else {
-    message.error("添加失败:" + res.message)
+  } else {
+    message.error("添加失败:" + res.message);
   }
-  selectedUserIds.value = []
-  selectedUser.value = []
+
+  // 清空相关状态
+  selectedUserIds.value = [];
+  selectedUser.value = [];
+  needAddUser.value = []; // 清空 needAddUser
   open.value = false;
-  needShowSelect.value = []
-  await getUserGroupById()
-  await loadData()
+  needShowSelect.value = [];
+
+  // 重新加载数据
+  await getUserGroupById();
+  await loadData();
 };
+
 
 // 新增用户还是编辑用户对话框标识
 const userModal = ref('')
@@ -353,7 +369,7 @@ const existUserIds = ref([] as any[]);
 const existUsers = ref([] as any[]);
 
 const getUserGroupById = async () => {
-  const res = await QuestionGroupControllerService.getUserGroupByIdUsingGet(props.id);
+  const res = await UserGroupControllerService.getUserGroupByIdUsingGet(props.id);
   if(res.code === 0) {
     userGroup.value = res.data
     existUsers.value = res.data?.userVOList as any[]

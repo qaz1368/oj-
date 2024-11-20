@@ -121,11 +121,14 @@ import {routes} from "@/router/routes";
 import {IconNotification, IconPoweroff, IconUser} from "@arco-design/web-vue/es/icon";
 import {AppstoreFilled, UserOutlined, CalculatorFilled, CodeFilled, ProfileOutlined} from "@ant-design/icons-vue"
 import {useStore} from "vuex";
-import {FileControllerService, UserControllerService, UserUpdateMyRequest} from "../../generated";
+import { UserControllerService, UserUpdateMyRequest} from "../../generated";
 import message from "@arco-design/web-vue/es/message";
 import {onMounted} from "@vue/runtime-core";
 import {Button as aButton, Upload as aUpload,Input, Form, FormItem} from 'ant-design-vue';
-import {Effect} from "element-plus";
+import { initPageCloseLogger } from "@/utils/pageCloseLogger";
+
+// 初始化页面
+initPageCloseLogger();
 
 const router = useRouter();
 const store = useStore()
@@ -177,7 +180,9 @@ const toLogin = () => {
 }
 
 const customRequestImg = async (Img: any) => {
-  const res = await FileControllerService.uploadFileUsingPost(Img.file, "user_avatar")
+  const res = await UserControllerService.uploadUsingPost(
+    Img
+  )
   if(res.code === 0) {
     editUserDetail.value.userAvatar = "https://" + res.data
   }else {

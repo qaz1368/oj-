@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type UserGroupQueryRequest = {
     current?: number;
     groupName?: string;
@@ -10,4 +11,3 @@ export type UserGroupQueryRequest = {
     sortField?: string;
     sortOrder?: string;
 };
-

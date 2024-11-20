@@ -104,8 +104,8 @@ import {useRoute, useRouter} from "vue-router";
 import {CloudUploadOutlined,CaretRightOutlined} from '@ant-design/icons-vue'
 import {Button as aButton, Upload as aUpload,Input, Form, FormItem, Popover} from 'ant-design-vue';
 import {
-   QuestionControllerService,
-  QuestionSubmitAddRequest,
+  QuestionControllerService,
+  QuestionSubmitAddRequest, QuestionSubmitControllerService,
   UserControllerService,
   UserUpdateMyRequest
 } from "../../generated"
@@ -206,7 +206,7 @@ const doSubmit = async () => {
   if (info.value.questionId === undefined) {
     return;
   }
-  const res = await QuestionControllerService.doQuestionSubmitUsingPost(info.value)
+  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost(info.value)
   if(res.code === 0) {
     message.success("提交成功")
   }else {
@@ -222,7 +222,7 @@ const runQuestion = async () => {
   if(inputList?.value === undefined || inputList?.value?.length === 0) {
      return
   }
-  const res = await QuestionControllerService.runQuestionUsingPost({
+  const res = await QuestionSubmitControllerService.runQuestionUsingPost({
     // code: info.value.code.replace(/\\r\\n/g,"\n"),
     code: info.value.code,
     inputList: inputList.value,

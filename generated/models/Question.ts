@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export type Question = {
     acceptedNum?: number;
     answer?: string;
@@ -19,4 +20,3 @@ export type Question = {
     updateTime?: string;
     userId?: number;
 };
-
